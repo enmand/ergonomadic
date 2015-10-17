@@ -50,7 +50,7 @@ var (
 func NewServer(config *Config) *Server {
 	server := &Server{
 		channels:  make(ChannelNameMap),
-		clients:   NewClientLookupSet(),
+		clients:   NewClientLookupSet(config.Server.Database),
 		commands:  make(chan Command),
 		ctime:     time.Now(),
 		db:        OpenDB(config.Server.Database),
