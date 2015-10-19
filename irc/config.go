@@ -47,6 +47,7 @@ type Config struct {
 		Log      string
 		MOTD     string
 		Name     string
+		Mask     string
 	}
 
 	Operator map[string]*PassConfig

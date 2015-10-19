@@ -23,6 +23,7 @@ type Client struct {
 	hasQuit      bool
 	hops         uint
 	hostname     Name
+	hostMask     []byte
 	idleTimer    *time.Timer
 	nick         Name
 	quitTimer    *time.Timer
@@ -33,7 +34,7 @@ type Client struct {
 	username     Name
 }
 
-func NewClient(server *Server, conn net.Conn) *Client {
+func NewClient(server *Server, conn net.Conn, hostMask []byte) *Client {
 	now := time.Now()
 	client := &Client{
 		atime:        now,
@@ -45,6 +46,7 @@ func NewClient(server *Server, conn net.Conn) *Client {
 		flags:        make(map[UserMode]bool),
 		server:       server,
 		socket:       NewSocket(conn),
+		hostMask:     hostMask,
 	}
 	client.Touch()
 	go client.run()
@@ -209,12 +211,20 @@ func (c *Client) ModeString() (str string) {
 	return
 }
 
+func (c *Client) maskedHostname() Name {
+	return MaskHostname(c.hostname, c.hostMask)
+}
+
 func (c *Client) UserHost() Name {
 	username := "*"
 	if c.HasUsername() {
 		username = c.username.String()
 	}
-	return Name(fmt.Sprintf("%s!%s@%s", c.Nick(), username, c.hostname))
+	var hostname = c.hostname
+	if len(c.hostMask) > 0 {
+		hostname = c.maskedHostname()
+	}
+	return Name(fmt.Sprintf("%s!%s@%s", c.Nick(), username, hostname))
 }
 
 func (c *Client) Nick() Name {

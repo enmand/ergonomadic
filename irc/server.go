@@ -40,6 +40,7 @@ type Server struct {
 	signals   chan os.Signal
 	whoWas    *WhoWasList
 	theaters  map[Name][]byte
+	hostMask  []byte
 }
 
 var (
@@ -62,6 +63,7 @@ func NewServer(config *Config) *Server {
 		signals:   make(chan os.Signal, len(SERVER_SIGNALS)),
 		whoWas:    NewWhoWasList(100),
 		theaters:  config.Theaters(),
+		hostMask:  []byte(config.Server.Mask),
 	}
 
 	if config.Server.Password != "" {
@@ -172,7 +174,7 @@ func (server *Server) Run() {
 			done = true
 
 		case conn := <-server.newConns:
-			NewClient(server, conn)
+			NewClient(server, conn, server.hostMask)
 
 		case cmd := <-server.commands:
 			server.processCommand(cmd)
