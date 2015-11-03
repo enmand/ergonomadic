@@ -23,7 +23,7 @@ func (list *WhoWasList) Append(client *Client) {
 	list.buffer[list.end] = &WhoWas{
 		nickname: client.Nick(),
 		username: client.username,
-		hostname: client.hostname,
+		hostname: client.UserHost(),
 		realname: client.realname,
 	}
 	list.end = (list.end + 1) % len(list.buffer)

@@ -249,7 +249,7 @@ func (target *Client) RplWhois(client *Client) {
 
 func (target *Client) RplWhoisUser(client *Client) {
 	target.NumericReply(RPL_WHOISUSER,
-		"%s %s %s * :%s", client.Nick(), client.username, client.hostname,
+		"%s %s %s * :%s", client.Nick(), client.username, client.UserHost(),
 		client.realname)
 }
 
