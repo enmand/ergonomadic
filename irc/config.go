@@ -2,9 +2,9 @@ package irc
 
 import (
 	"code.google.com/p/gcfg"
+	"crypto/tls"
 	"errors"
 	"log"
-	"crypto/tls"
 )
 
 type PassConfig struct {
