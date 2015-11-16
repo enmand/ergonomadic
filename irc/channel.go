@@ -236,6 +236,14 @@ func (channel *Channel) CanSpeak(client *Client) bool {
 		channel.members.HasMode(client, ChannelOperator)) {
 		return false
 	}
+
+	isInvited := channel.lists[InviteMask].Match(client.UserHost())
+	if channel.lists[BanMask].Match(client.UserHost()) &&
+		!isInvited &&
+		!channel.lists[ExceptMask].Match(client.UserHost()) {
+		client.ErrBannedFromChan(channel)
+		return false
+	}
 	return true
 }
 
