@@ -254,7 +254,8 @@ func (set *UserMaskSet) setRegexp() {
 			}
 			manyExprs[mindex] = strings.Join(oneExprs, ".")
 		}
-		maskExprs[index] = strings.Join(manyExprs, ".*")
+		maskExprs[index] = strings.Join(manyExprs, ".*?")
+		index++
 	}
 	expr := "^" + strings.Join(maskExprs, "|") + "$"
 	set.regexp, _ = regexp.Compile(expr)
