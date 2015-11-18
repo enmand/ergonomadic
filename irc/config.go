@@ -1,10 +1,11 @@
 package irc
 
 import (
-	"code.google.com/p/gcfg"
+	"gopkg.in/gcfg.v1"
+
+	"crypto/tls"
 	"errors"
 	"log"
-	"crypto/tls"
 )
 
 type PassConfig struct {
